@@ -128,7 +128,7 @@
         </DebugOption>
         <Utilities>
           <Flash1>
-            <UseTargetDll>1</UseTargetDll>
+            <UseTargetDll>0</UseTargetDll>
             <UseExternalTool>1</UseExternalTool>
             <RunIndependent>0</RunIndependent>
             <UpdateFlashBeforeDebugging>1</UpdateFlashBeforeDebugging>
@@ -369,7 +369,7 @@
             <ScatterFile>..\src\sdk\common_project_files\scatterfiles\scatterfile_common.sct</ScatterFile>
             <IncludeLibs></IncludeLibs>
             <IncludeLibsPath></IncludeLibsPath>
-            <Misc>--feedback=".\unused.txt" ..\src\sdk\common_project_files\misc\rom_symdef.txt  --symdefs=ble_app_peripheral_580_symdef.txt --keep gapm.o(timeout_table_area) --keep jump_table.o(*)  --keep nvds.o(*) --any_placement=best_fit --datacompressor off</Misc>
+            <Misc>--feedback=".\unused.txt" ..\src\sdk\common_project_files\misc\rom_symdef.txt  --symdefs=assist_symdef.txt --keep gapm.o(timeout_table_area) --keep jump_table.o(*)  --keep nvds.o(*) --any_placement=best_fit --datacompressor off</Misc>
             <LinkerInputFile></LinkerInputFile>
             <DisabledWarnings></DisabledWarnings>
           </LDads>

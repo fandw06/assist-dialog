@@ -105,7 +105,15 @@ void user_custs1_adxl_val_ntf_cfm_handler(ke_msg_id_t const msgid,
  * @return void
  ****************************************************************************************
  */
-void app_adxlvals_timer_cb_handler(void);
+void app_adxl_val_timer_cb_handler(void);
+																						
+/**
+ ****************************************************************************************
+ * @brief ECG sampling timer callback handler.
+ * @return void
+ ****************************************************************************************
+ */
+void app_ecg_val_timer_cb_handler(void);
 
 /// @} APP
 

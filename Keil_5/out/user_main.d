@@ -90,3 +90,4 @@
 .\out\user_main.o: ..\src\sdk\platform\include\_reg_ble_em_rx.h
 .\out\user_main.o: ..\src\sdk\platform\include\_reg_ble_em_wpb.h
 .\out\user_main.o: ..\src\sdk\platform\include\_reg_ble_em_wpv.h
+.\out\user_main.o: ..\src\sdk\platform\driver\adc\adc.h

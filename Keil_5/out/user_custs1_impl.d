@@ -87,5 +87,6 @@
 .\out\user_custs1_impl.o: .\..\src\config\user_periph_setup.h
 .\out\user_custs1_impl.o: .\..\src\sdk\common_project_files\da1458x_periph_setup.h
 .\out\user_custs1_impl.o: ..\src\sdk\platform\driver\i2c_eeprom\i2c_eeprom.h
+.\out\user_custs1_impl.o: ..\src\sdk\platform\driver\adc\adc.h
 .\out\user_custs1_impl.o: ..\src\user_driver\spi_adxl\spi_adxl.h
 .\out\user_custs1_impl.o: ..\src\sdk\platform\driver\spi\spi.h

@@ -1,16 +1,9 @@
 /**
  ****************************************************************************************
  *
- * @file user_main_proj.h
+ * @file user_main.h
  *
- * @brief Peripheral project header file.
- *
- * Copyright (C) 2015. Dialog Semiconductor Ltd, unpublished work. This computer
- * program includes Confidential, Proprietary Information and is a Trade Secret of
- * Dialog Semiconductor Ltd.  All use, disclosure, and/or reproduction is prohibited
- * unless authorized in writing. All Rights Reserved.
- *
- * <bluetooth.support@diasemi.com> and contributors.
+ * @brief Assist header file.
  *
  ****************************************************************************************
  */
@@ -64,7 +57,8 @@
 #define APP_AD_MSD_DATA_LEN         (sizeof(uint16_t))
 
 //50ms, unit is 10ms
-#define APP_PERIPHERAL_CTRL_TIMER_DELAY 5
+#define ECG_INTERVAL 5
+#define ACC_INTERVAL 10
 /*
  * TYPE DEFINITIONS
  ****************************************************************************************

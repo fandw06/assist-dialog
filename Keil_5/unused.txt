@@ -1,4 +1,4 @@
-;#<FEEDBACK># ARM Linker, 5060422: Last Updated: Thu Feb 02 14:18:51 2017
+;#<FEEDBACK># ARM Linker, 5060422: Last Updated: Thu Feb 02 23:45:11 2017
 ;VERSION 0.2
 ;FILE adc.o
 adc_calibrate <= USED 0
@@ -191,6 +191,8 @@ uart2_read <= USED 0
 uart2_write <= USED 0
 ;FILE user_custs1_impl.o
 user_custs1_adxl_val_ntf_cfm_handler <= USED 0
+user_custs1_ecg_val_cfg_ind_handler <= USED 0
+user_custs1_ecg_val_ntf_cfm_handler <= USED 0
 ;FILE user_main.o
 ;FILE user_periph_setup.o
 ;FILE wkupct_quadec.o

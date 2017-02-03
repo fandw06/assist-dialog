@@ -38,12 +38,15 @@
 
 #define DEF_CUST1_CTRL_POINT_UUID_128      {0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
 #define DEF_CUST1_ADXL_VAL_UUID_128        {0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
+#define DEF_CUST1_ECG_VAL_UUID_128         {0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
 
 #define DEF_CUST1_CTRL_POINT_CHAR_LEN      1
 #define DEF_CUST1_ADXL_VAL_CHAR_LEN        3
+#define DEF_CUST1_ECG_VAL_CHAR_LEN         2
 
 #define CUST1_CONTROL_POINT_USER_DESC      "Control"
 #define CUST1_ADXL_VAL_USER_DESC           "Acceleration"
+#define CUST1_ECG_VAL_USER_DESC            "ECG"
 
 /// Custom1 Service Data Base Characteristic enum
 enum
@@ -58,6 +61,11 @@ enum
     CUST1_IDX_ADXL_VAL_VAL,
     CUST1_IDX_ADXL_VAL_NTF_CFG, 
     CUST1_IDX_ADXL_VAL_USER_DESC,
+	
+	  CUST1_IDX_ECG_VAL_CHAR,
+    CUST1_IDX_ECG_VAL_VAL,
+    CUST1_IDX_ECG_VAL_NTF_CFG, 
+    CUST1_IDX_ECG_VAL_USER_DESC,
 
     CUST1_IDX_NB
 };

@@ -1,16 +1,9 @@
 /**
  ****************************************************************************************
  *
- * @file user_peripheral.c
+ * @file user_main.c
  *
- * @brief Peripheral project source code.
- *
- * Copyright (C) 2015. Dialog Semiconductor Ltd, unpublished work. This computer
- * program includes Confidential, Proprietary Information and is a Trade Secret of
- * Dialog Semiconductor Ltd.  All use, disclosure, and/or reproduction is prohibited
- * unless authorized in writing. All Rights Reserved.
- *
- * <bluetooth.support@diasemi.com> and contributors.
+ * @brief Assist source code.
  *
  ****************************************************************************************
  */
@@ -35,6 +28,7 @@
 #include "gap.h"
 #include "spi_adxl.h"
 #include "rf_580.h"
+#include "adc.h"
 
 extern uint8_t read_DEVID_AD(void);
 extern uint8_t read_DEVID_MST(void);
@@ -42,7 +36,7 @@ extern uint8_t read_PARTID(void);
 extern uint8_t read_REVID(void);
 extern uint8_t read_accel(uint8_t channel_address);
 extern void adxl_init(uint8_t odr);
-
+void user_adc_init(void);
 /*
  * TYPE DEFINITIONS
  ****************************************************************************************
@@ -143,10 +137,21 @@ void user_app_init(void)
 
     default_app_on_init();
 	
+	  // Initialize SPI adxl
 	  adxl_init(ODR_25HZ);
+	
+	  // Initialize ADC
+	  user_adc_init();
+	
 		// enable near field mode.
 	  if (!rf_nfm_is_enabled())
 			rf_nfm_enable();
+}
+
+void user_adc_init(void) 
+{
+    adc_init(GP_ADC_SE, 0, 0);
+	  adc_enable_channel(ADC_CHANNEL_P02);
 }
 
 /**

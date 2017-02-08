@@ -57,7 +57,7 @@
 #define APP_AD_MSD_DATA_LEN         (sizeof(uint16_t))
 
 //50ms, unit is 10ms
-#define ECG_INTERVAL 5
+#define ECG_INTERVAL 2
 #define ACC_INTERVAL 10
 /*
  * TYPE DEFINITIONS

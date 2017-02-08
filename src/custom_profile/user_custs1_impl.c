@@ -3,7 +3,7 @@
  *
  * @file user_custs1_impl.c
  *
- * @brief Peripheral project Custom1 Server implementation source code.
+ * @brief Custom1 Server implementation source code.
  *
  * Copyright (C) 2015. Dialog Semiconductor Ltd, unpublished work. This computer
  * program includes Confidential, Proprietary Information and is a Trade Secret of
@@ -37,7 +37,7 @@
 
 ke_msg_id_t timer_accel;
 ke_msg_id_t timer_ecg;
-
+bool running;
 /*
  * FUNCTION DEFINITIONS
  ****************************************************************************************
@@ -51,9 +51,28 @@ void user_custs1_ctrl_wr_ind_handler(ke_msg_id_t const msgid,
     uint8_t val = 0;
     memcpy(&val, &param->value[0], param->length);
 
-
-    timer_accel = app_easy_timer(ACC_INTERVAL, app_adxl_val_timer_cb_handler);
-	  timer_ecg = app_easy_timer(ECG_INTERVAL, app_ecg_val_timer_cb_handler);
+		if (val == CUSTS1_DATA_ENABLE) 
+		{
+				timer_accel = app_easy_timer(ACC_INTERVAL, app_adxl_val_timer_cb_handler);
+				timer_ecg = app_easy_timer(ECG_INTERVAL, app_ecg_val_timer_cb_handler);
+			  running = 1;
+		}
+		else 
+		{
+			  running = 0;
+			/*
+			  if (timer_accel != 0xFFFF)
+        {
+            app_easy_timer_cancel(timer_accel);
+            timer_accel = 0xFFFF;
+        }
+				if (timer_ecg != 0xFFFF)
+        {
+            app_easy_timer_cancel(timer_ecg);
+            timer_ecg = 0xFFFF;
+        }
+			*/
+		}
 }
 
 void user_custs1_adxl_val_cfg_ind_handler(ke_msg_id_t const msgid,
@@ -102,7 +121,7 @@ void app_adxl_val_timer_cb_handler()
 
     ke_msg_send(req);
 
-    if (ke_state_get(TASK_APP) == APP_CONNECTED)
+    if (ke_state_get(TASK_APP) == APP_CONNECTED && running)
     {
         // Set it once again until Stop command is received in Control Characteristic
         timer_accel = app_easy_timer(ACC_INTERVAL, app_adxl_val_timer_cb_handler);
@@ -131,7 +150,7 @@ void app_ecg_val_timer_cb_handler()
 
     ke_msg_send(req);
 
-    if (ke_state_get(TASK_APP) == APP_CONNECTED)
+    if (ke_state_get(TASK_APP) == APP_CONNECTED && running)
     {
         // Set it once again until Stop command is received in Control Characteristic
         timer_ecg = app_easy_timer(ECG_INTERVAL, app_ecg_val_timer_cb_handler);

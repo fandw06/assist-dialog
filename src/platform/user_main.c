@@ -144,8 +144,8 @@ void user_app_init(void)
 	  user_adc_init();
 	
 		// enable near field mode.
-	  if (!rf_nfm_is_enabled())
-			rf_nfm_enable();
+	//	rf_nfm_enable();
+	  rf_nfm_disable();
 }
 
 void user_adc_init(void) 
@@ -188,6 +188,7 @@ static void app_add_ad_struct(struct gapm_start_advertise_cmd *cmd, void *ad_str
 
 void user_app_adv_start(void)
 {
+	
     // Schedule the next advertising data update
     app_adv_data_update_timer_used = app_easy_timer(APP_ADV_DATA_UPDATE_TO, adv_data_update_timer_cb);
 
@@ -199,8 +200,11 @@ void user_app_adv_start(void)
     app_add_ad_struct(cmd, &mnf_data, sizeof(struct mnf_specific_data_ad_structure));
     // Set deep sleep during advertising
   //  arch_set_deep_sleep();
-	arch_set_extended_sleep();
+	//  arch_set_extended_sleep();
     app_easy_gap_undirected_advertise_start();
+	
+//	 arch_set_deep_sleep();
+//	  arch_set_extended_sleep();
 }
 
 void user_app_connection(uint8_t connection_idx, struct gapc_connection_req_ind const *param)
@@ -233,6 +237,7 @@ void user_app_connection(uint8_t connection_idx, struct gapc_connection_req_ind 
     }
 
     default_app_on_connection(connection_idx, param);
+	//	arch_set_extended_sleep();
 }
 
 void user_app_adv_undirect_complete(uint8_t status)

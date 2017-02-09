@@ -54,6 +54,12 @@ void user_custs1_ctrl_wr_ind_handler(ke_msg_id_t const msgid,
 		if (val == CUSTS1_DATA_ENABLE) 
 		{
 				timer_accel = app_easy_timer(ACC_INTERVAL, app_adxl_val_timer_cb_handler);
+			  int i = 0;
+			  for (i = 0; i<0xFFFF; i++) 
+			  {
+						int t = i*0x8976/7232;
+				}
+				
 				timer_ecg = app_easy_timer(ECG_INTERVAL, app_ecg_val_timer_cb_handler);
 			  running = 1;
 		}

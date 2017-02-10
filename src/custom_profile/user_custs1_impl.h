@@ -114,6 +114,14 @@ void app_adxl_val_timer_cb_handler(void);
  ****************************************************************************************
  */
 void app_ecg_val_timer_cb_handler(void);
+																						
+/**
+ ****************************************************************************************
+ * @brief VOL sampling timer callback handler.
+ * @return void
+ ****************************************************************************************
+ */
+void app_vol_val_timer_cb_handler(void);
 
 /// @} APP
 

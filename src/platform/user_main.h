@@ -59,6 +59,7 @@
 //50ms, unit is 10ms
 #define ECG_INTERVAL 5
 #define ACC_INTERVAL 10
+#define VOL_INTERVAL 10
 /*
  * TYPE DEFINITIONS
  ****************************************************************************************

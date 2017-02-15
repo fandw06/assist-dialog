@@ -45,6 +45,7 @@ static att_svc_desc128_t custs1_svc                              = DEF_CUST1_SVC
 static uint8_t CUST1_CTRL_POINT_UUID_128[ATT_UUID_128_LEN]       = DEF_CUST1_CTRL_POINT_UUID_128;
 static uint8_t CUST1_ADXL_VAL_UUID_128[ATT_UUID_128_LEN]         = DEF_CUST1_ADXL_VAL_UUID_128;
 static uint8_t CUST1_ECG_VAL_UUID_128[ATT_UUID_128_LEN]          = DEF_CUST1_ECG_VAL_UUID_128;
+static uint8_t CUST1_VOL_VAL_UUID_128[ATT_UUID_128_LEN]          = DEF_CUST1_VOL_VAL_UUID_128;
 
 static struct att_char128_desc custs1_ctrl_point_char       = {ATT_CHAR_PROP_WR,
                                                               {0, 0},
@@ -57,6 +58,11 @@ static struct att_char128_desc custs1_adxl_val_char         = {ATT_CHAR_PROP_RD 
 static struct att_char128_desc custs1_ecg_val_char          = {ATT_CHAR_PROP_RD | ATT_CHAR_PROP_NTF,
                                                               {0, 0},
                                                               DEF_CUST1_ECG_VAL_UUID_128};
+
+static struct att_char128_desc custs1_vol_val_char          = {ATT_CHAR_PROP_RD | ATT_CHAR_PROP_NTF,
+                                                              {0, 0},
+                                                              DEF_CUST1_VOL_VAL_UUID_128};
+
 static uint16_t att_decl_svc       = ATT_DECL_PRIMARY_SERVICE;
 static uint16_t att_decl_char      = ATT_DECL_CHARACTERISTIC;
 static uint16_t att_decl_cfg       = ATT_DESC_CLIENT_CHAR_CFG;
@@ -117,6 +123,22 @@ struct attm_desc_128 custs1_att_db[CUST1_IDX_NB] =
     // ECG Value Characteristic User Description
     [CUST1_IDX_ECG_VAL_USER_DESC]     = {(uint8_t*)&att_decl_user_desc, ATT_UUID_16_LEN, PERM(RD, ENABLE),
                                             sizeof(CUST1_ECG_VAL_USER_DESC) - 1, sizeof(CUST1_ECG_VAL_USER_DESC) - 1, CUST1_ECG_VAL_USER_DESC},
+				
+		// VOL Value Characteristic Declaration
+    [CUST1_IDX_VOL_VAL_CHAR]          = {(uint8_t*)&att_decl_char, ATT_UUID_16_LEN, PERM(RD, ENABLE),
+                                            sizeof(custs1_vol_val_char), sizeof(custs1_vol_val_char), (uint8_t*)&custs1_vol_val_char},
+
+    // VOL Value Characteristic Value
+    [CUST1_IDX_VOL_VAL_VAL]           = {CUST1_ECG_VAL_UUID_128, ATT_UUID_128_LEN, PERM(RD, ENABLE) | PERM(NTF, ENABLE),
+                                            DEF_CUST1_VOL_VAL_CHAR_LEN, 0, NULL},
+
+    // VOL Value Client Characteristic Configuration Descriptor
+    [CUST1_IDX_VOL_VAL_NTF_CFG]       = {(uint8_t*)&att_decl_cfg, ATT_UUID_16_LEN, PERM(RD, ENABLE) | PERM(WR, ENABLE),
+                                            sizeof(uint16_t), 0, NULL},
+
+    // VOL Value Characteristic User Description
+    [CUST1_IDX_VOL_VAL_USER_DESC]     = {(uint8_t*)&att_decl_user_desc, ATT_UUID_16_LEN, PERM(RD, ENABLE),
+                                            sizeof(CUST1_VOL_VAL_USER_DESC) - 1, sizeof(CUST1_VOL_VAL_USER_DESC) - 1, CUST1_VOL_VAL_USER_DESC},
 };
 
 /// @} USER_CONFIG

@@ -140,18 +140,9 @@ void user_app_init(void)
 	  // Initialize SPI adxl
 	  adxl_init(ODR_25HZ);
 	
-	  // Initialize ADC
-	  user_adc_init();
-	
 		// enable near field mode.
 	//	rf_nfm_enable();
 	  rf_nfm_disable();
-}
-
-void user_adc_init(void) 
-{
-    adc_init(GP_ADC_SE, 0, 0);
-	  adc_enable_channel(ADC_CHANNEL_P02);
 }
 
 /**
@@ -198,17 +189,16 @@ void user_app_adv_start(void)
     // add manufacturer specific data dynamically
     mnf_data_update();
     app_add_ad_struct(cmd, &mnf_data, sizeof(struct mnf_specific_data_ad_structure));
-    // Set deep sleep during advertising
-  //  arch_set_deep_sleep();
-	//  arch_set_extended_sleep();
+	  arch_set_extended_sleep();
     app_easy_gap_undirected_advertise_start();
-	
-//	 arch_set_deep_sleep();
-//	  arch_set_extended_sleep();
+
 }
 
 void user_app_connection(uint8_t connection_idx, struct gapc_connection_req_ind const *param)
 {
+	
+	  default_app_on_connection(connection_idx, param);
+	
     if (app_env[connection_idx].conidx != GAP_INVALID_CONIDX)
     {
         app_connection_idx = connection_idx;
@@ -227,17 +217,9 @@ void user_app_connection(uint8_t connection_idx, struct gapc_connection_req_ind 
             app_param_update_request_timer_used = app_easy_timer(APP_PARAM_UPDATE_REQUEST_TO, param_update_request_timer_cb);
         }
 				
-				        // Set extended sleep during connection
-        //arch_set_extended_sleep();
+				// Set extended sleep during connection
+        arch_set_extended_sleep();
     }
-    else
-    {
-        // No connection has been established, restart advertising
-        user_app_adv_start();
-    }
-
-    default_app_on_connection(connection_idx, param);
-	//	arch_set_extended_sleep();
 }
 
 void user_app_adv_undirect_complete(uint8_t status)
@@ -245,7 +227,7 @@ void user_app_adv_undirect_complete(uint8_t status)
     // If advertising was canceled then update advertising data and start advertising again
     if (status == GAP_ERR_CANCELED)
     {
-        user_app_adv_start();
+	       arch_ble_ext_wakeup_on();
     }
 }
 
@@ -290,10 +272,6 @@ void user_catch_rest_hndl(ke_msg_id_t const msgid,
                 case CUST1_IDX_CONTROL_POINT_VAL:
                    user_custs1_ctrl_wr_ind_handler(msgid, msg_param, dest_id, src_id);
                    break;
-
-                case CUST1_IDX_ADXL_VAL_NTF_CFG:
-                    user_custs1_adxl_val_cfg_ind_handler(msgid, msg_param, dest_id, src_id);
-                    break;
 
                 default:
                     break;

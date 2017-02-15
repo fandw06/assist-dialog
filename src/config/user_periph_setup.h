@@ -43,6 +43,7 @@
 #define HW_CONFIG_PRO_DK    ((HW_CONFIG==0 && SDK_CONFIG==2) || HW_CONFIG==2)
 #define HW_CONFIG_EXPERT_DK ((HW_CONFIG==0 && SDK_CONFIG==3) || HW_CONFIG==3)
 
+
 //*** <<< end of configuration section >>>    ***
 
 /****************************************************************************************/
@@ -64,23 +65,42 @@
 #define SPI_SECTOR_SIZE         4096
 
 #ifndef __DA14583__
-    #define SPI_EN_GPIO_PORT    GPIO_PORT_0
-    #define SPI_EN_GPIO_PIN     GPIO_PIN_3
 
-    #define SPI_CLK_GPIO_PORT   GPIO_PORT_0
+		/** default settings for SPI.	
+		#define SPI_CLK_GPIO_PORT   GPIO_PORT_0
+		#define SPI_EN_GPIO_PORT    GPIO_PORT_0
+		#define SPI_DI_GPIO_PORT    GPIO_PORT_0
+		#define SPI_DO_GPIO_PORT    GPIO_PORT_0
     #define SPI_CLK_GPIO_PIN    GPIO_PIN_0
-
-    #define SPI_DO_GPIO_PORT    GPIO_PORT_0
+    #define SPI_EN_GPIO_PIN     GPIO_PIN_3
+    #define SPI_DI_GPIO_PIN     GPIO_PIN_5
     #define SPI_DO_GPIO_PIN     GPIO_PIN_6
 
-    #define SPI_DI_GPIO_PORT    GPIO_PORT_0
-    #define SPI_DI_GPIO_PIN     GPIO_PIN_5
 		
 		#define SPI_GPIO_PORT  GPIO_PORT_0 
     #define SPI_CLK_PIN    GPIO_PIN_0
     #define SPI_CS_PIN     GPIO_PIN_3
     #define SPI_DI_PIN     GPIO_PIN_5
-    #define SPI_DO_PIN     GPIO_PIN_6
+		#define SPI_DO_PIN     GPIO_PIN_6
+		*/
+		
+		/* SPI settings using GPIO_PORT_1 */
+		#define SPI_CLK_GPIO_PORT   GPIO_PORT_1
+		#define SPI_EN_GPIO_PORT    GPIO_PORT_1
+		#define SPI_DI_GPIO_PORT    GPIO_PORT_1
+		#define SPI_DO_GPIO_PORT    GPIO_PORT_1
+    #define SPI_CLK_GPIO_PIN    GPIO_PIN_0
+    #define SPI_EN_GPIO_PIN     GPIO_PIN_1
+    #define SPI_DI_GPIO_PIN     GPIO_PIN_2
+    #define SPI_DO_GPIO_PIN     GPIO_PIN_3
+		
+		#define SPI_GPIO_PORT  GPIO_PORT_1
+    #define SPI_CLK_PIN    GPIO_PIN_0
+    #define SPI_CS_PIN     GPIO_PIN_1
+    #define SPI_DI_PIN     GPIO_PIN_2
+		#define SPI_DO_PIN     GPIO_PIN_3
+		/**/
+		
 #else // DA14583
     #define SPI_EN_GPIO_PORT    GPIO_PORT_2
     #define SPI_EN_GPIO_PIN     GPIO_PIN_3
@@ -131,24 +151,6 @@
     #endif
 #endif
 
-/****************************************************************************************/
-/* LED configuration                                                                    */
-/****************************************************************************************/
-
-#if HW_CONFIG_BASIC_DK
-    #define GPIO_LED_PORT     GPIO_PORT_1
-    #define GPIO_LED_PIN      GPIO_PIN_0
-
-#elif HW_CONFIG_PRO_DK
-    #define GPIO_LED_PORT     GPIO_PORT_1
-    #define GPIO_LED_PIN      GPIO_PIN_0
-
-#elif HW_CONFIG_EXPERT_DK
-    #define GPIO_LED_PORT     GPIO_PORT_1
-    #define GPIO_LED_PIN      GPIO_PIN_0
-
-#else // (other configuration)
-#endif
 
 /*
  * FUNCTION DECLARATIONS

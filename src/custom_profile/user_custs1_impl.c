@@ -35,8 +35,27 @@
  ****************************************************************************************
  */
 
+struct user_data_buffer accel_buff = {
+    .SIZE = 20,
+    .data = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	  .pos = 0,
+};
+
+struct user_data_buffer ecg_buff = {
+    .SIZE = 20,
+    .data = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	  .pos = 0,
+};
+
+struct user_data_buffer vol_buff = {
+    .SIZE = 20,
+    .data = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	  .pos = 0,
+};
+
 ke_msg_id_t timer_accel;
 ke_msg_id_t timer_ecg;
+ke_msg_id_t timer_vol;
 bool running;
 /*
  * FUNCTION DEFINITIONS
@@ -54,111 +73,116 @@ void user_custs1_ctrl_wr_ind_handler(ke_msg_id_t const msgid,
 		if (val == CUSTS1_DATA_ENABLE) 
 		{
 				timer_accel = app_easy_timer(ACC_INTERVAL, app_adxl_val_timer_cb_handler);
-			  int i = 0;
-			  for (i = 0; i<0xFFFF; i++) 
-			  {
-						int t = i*0x8976/7232;
-				}
-				
 				timer_ecg = app_easy_timer(ECG_INTERVAL, app_ecg_val_timer_cb_handler);
+			  timer_vol = app_easy_timer(VOL_INTERVAL, app_vol_val_timer_cb_handler);
 			  running = 1;
 		}
 		else 
 		{
 			  running = 0;
-			/*
-			  if (timer_accel != 0xFFFF)
-        {
-            app_easy_timer_cancel(timer_accel);
-            timer_accel = 0xFFFF;
-        }
-				if (timer_ecg != 0xFFFF)
-        {
-            app_easy_timer_cancel(timer_ecg);
-            timer_ecg = 0xFFFF;
-        }
-			*/
 		}
-}
-
-void user_custs1_adxl_val_cfg_ind_handler(ke_msg_id_t const msgid,
-                                            struct custs1_val_write_ind const *param,
-                                            ke_task_id_t const dest_id,
-                                            ke_task_id_t const src_id)
-{
-}
-
-void user_custs1_adxl_val_ntf_cfm_handler(ke_msg_id_t const msgid,
-                                            struct custs1_val_write_ind const *param,
-                                            ke_task_id_t const dest_id,
-                                            ke_task_id_t const src_id)
-{
-}
-
-void user_custs1_ecg_val_cfg_ind_handler(ke_msg_id_t const msgid,
-                                            struct custs1_val_write_ind const *param,
-                                            ke_task_id_t const dest_id,
-                                            ke_task_id_t const src_id)
-{
-}
-
-void user_custs1_ecg_val_ntf_cfm_handler(ke_msg_id_t const msgid,
-                                            struct custs1_val_write_ind const *param,
-                                            ke_task_id_t const dest_id,
-                                            ke_task_id_t const src_id)
-{
 }
 
 void app_adxl_val_timer_cb_handler()
 {
-    struct custs1_val_ntf_req* req = KE_MSG_ALLOC_DYN(CUSTS1_VAL_NTF_REQ,
-                                                      TASK_CUSTS1,
-                                                      TASK_APP,
-                                                      custs1_val_ntf_req,
-                                                      DEF_CUST1_ADXL_VAL_CHAR_LEN);
-	
-    uint8_t accel[] = {read_accel(ZDATA), read_accel(YDATA), read_accel(XDATA)};
-		int ecg = adc_get_sample();
+		// Current acceleration values.
+		uint8_t accel[] = {read_accel(ZDATA), read_accel(YDATA), read_accel(XDATA)};
+		accel_buff.data[accel_buff.pos++] = accel[0];
+		accel_buff.data[accel_buff.pos++] = accel[1];
+		accel_buff.data[accel_buff.pos++] = accel[2];
 		
-    req->conhdl = app_env->conhdl;
-    req->handle = CUST1_IDX_ADXL_VAL_VAL;
-    req->length = DEF_CUST1_ADXL_VAL_CHAR_LEN;
-    memcpy(req->value, &accel, DEF_CUST1_ADXL_VAL_CHAR_LEN);
-
-    ke_msg_send(req);
-
-    if (ke_state_get(TASK_APP) == APP_CONNECTED && running)
-    {
-        // Set it once again until Stop command is received in Control Characteristic
-        timer_accel = app_easy_timer(ACC_INTERVAL, app_adxl_val_timer_cb_handler);
-    }
+		// If the data buffer is full, then send a message to kernel to notify.
+		if (accel_buff.pos + 3 > accel_buff.SIZE) 
+		{
+			  accel_buff.pos = 0;
+				struct custs1_val_ntf_req* req = KE_MSG_ALLOC_DYN(CUSTS1_VAL_NTF_REQ,
+																													TASK_CUSTS1,
+																													TASK_APP,
+																													custs1_val_ntf_req,
+																													DEF_CUST1_ADXL_VAL_CHAR_LEN);
+				req->conhdl = app_env->conhdl;
+				req->handle = CUST1_IDX_ADXL_VAL_VAL;
+				req->length = DEF_CUST1_ADXL_VAL_CHAR_LEN;
+				memcpy(req->value, &accel_buff, DEF_CUST1_ADXL_VAL_CHAR_LEN);
+				ke_msg_send(req);
+	  }
+		
+		if (ke_state_get(TASK_APP) == APP_CONNECTED && running)
+		{
+				if (running)
+						timer_accel = app_easy_timer(ACC_INTERVAL, app_adxl_val_timer_cb_handler);
+		}
 }
 
 void app_ecg_val_timer_cb_handler()
-{
-    struct custs1_val_ntf_req* req = KE_MSG_ALLOC_DYN(CUSTS1_VAL_NTF_REQ,
-                                                      TASK_CUSTS1,
-                                                      TASK_APP,
-                                                      custs1_val_ntf_req,
-                                                      DEF_CUST1_ECG_VAL_CHAR_LEN);
+{		
+		// Initialize adc, channel 02
 	  adc_init(GP_ADC_SE, 0, 0);
 	  adc_enable_channel(ADC_CHANNEL_P02);
-		int ecg = adc_get_sample();
-		uint8_t low = ecg & 0xff;
-		uint8_t high = (ecg >> 8) & 0x03;
-		uint8_t ecg_val[2];
-		ecg_val[0] = high;
-		ecg_val[1] = low;
-    req->conhdl = app_env->conhdl;
-    req->handle = CUST1_IDX_ECG_VAL_VAL;
-    req->length = DEF_CUST1_ECG_VAL_CHAR_LEN;
-    memcpy(req->value, &ecg_val, DEF_CUST1_ECG_VAL_CHAR_LEN);
+		int data = adc_get_sample();
+		uint8_t adc[2];
+		adc[0] = (data >> 8) & 0x03;
+		adc[1] = data & 0xff;
 
-    ke_msg_send(req);
-
-    if (ke_state_get(TASK_APP) == APP_CONNECTED && running)
-    {
-        // Set it once again until Stop command is received in Control Characteristic
-        timer_ecg = app_easy_timer(ECG_INTERVAL, app_ecg_val_timer_cb_handler);
-    }
+		ecg_buff.data[ecg_buff.pos++] = adc[0];
+		ecg_buff.data[ecg_buff.pos++] = adc[1];
+		
+		// If the data buffer is full, then send a message to kernel to notify.
+		if (ecg_buff.pos + 2 > ecg_buff.SIZE) 
+		{
+			  ecg_buff.pos = 0;
+				struct custs1_val_ntf_req* req = KE_MSG_ALLOC_DYN(CUSTS1_VAL_NTF_REQ,
+																													TASK_CUSTS1,
+																													TASK_APP,
+																													custs1_val_ntf_req,
+																													DEF_CUST1_ECG_VAL_CHAR_LEN);
+				req->conhdl = app_env->conhdl;
+				req->handle = CUST1_IDX_ECG_VAL_VAL;
+				req->length = DEF_CUST1_ECG_VAL_CHAR_LEN;
+				memcpy(req->value, &ecg_buff, DEF_CUST1_ECG_VAL_CHAR_LEN);
+				ke_msg_send(req);
+	  }
+		
+		if (ke_state_get(TASK_APP) == APP_CONNECTED && running)
+		{
+				if (running)
+						timer_ecg = app_easy_timer(ECG_INTERVAL, app_ecg_val_timer_cb_handler);
+		}
 }
+
+void app_vol_val_timer_cb_handler()
+{		
+		// Initialize adc, channel 01
+	  adc_init(GP_ADC_SE, 0, 0);
+	  adc_enable_channel(ADC_CHANNEL_P01);
+		int data = adc_get_sample();
+		uint8_t adc[2];
+		adc[0] = (data >> 8) & 0x03;
+		adc[1] = data & 0xff;
+
+		vol_buff.data[vol_buff.pos++] = adc[0];
+		vol_buff.data[vol_buff.pos++] = adc[1];
+		
+		// If the data buffer is full, then send a message to kernel to notify.
+		if (vol_buff.pos + 2 > vol_buff.SIZE) 
+		{
+			  vol_buff.pos = 0;
+				struct custs1_val_ntf_req* req = KE_MSG_ALLOC_DYN(CUSTS1_VAL_NTF_REQ,
+																													TASK_CUSTS1,
+																													TASK_APP,
+																													custs1_val_ntf_req,
+																													DEF_CUST1_VOL_VAL_CHAR_LEN);
+				req->conhdl = app_env->conhdl;
+				req->handle = CUST1_IDX_VOL_VAL_VAL;
+				req->length = DEF_CUST1_VOL_VAL_CHAR_LEN;
+				memcpy(req->value, &vol_buff, DEF_CUST1_VOL_VAL_CHAR_LEN);
+				ke_msg_send(req);
+	  }
+		
+		if (ke_state_get(TASK_APP) == APP_CONNECTED && running)
+		{
+				if (running)
+						timer_vol = app_easy_timer(VOL_INTERVAL, app_vol_val_timer_cb_handler);
+		}
+}
+

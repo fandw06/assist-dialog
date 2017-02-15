@@ -177,18 +177,18 @@ static const struct gapm_configuration user_gapm_conf = {
     /// Peripheral only: *****************************************************************
     /// Slave preferred Minimum of connection interval  measured in ble double slots (1.25ms)
     /// use the macro MS_TO_DOUBLESLOTS to convert from milliseconds (ms) to double slots
-    .con_intv_min = MS_TO_DOUBLESLOTS(10),
+    .con_intv_min = MS_TO_DOUBLESLOTS(880),
 
     /// Slave preferred Maximum of connection interval  measured in ble double slots (1.25ms)
     /// use the macro MS_TO_DOUBLESLOTS to convert from milliseconds (ms) to double slots
-    .con_intv_max = MS_TO_DOUBLESLOTS(20),
+    .con_intv_max = MS_TO_DOUBLESLOTS(900),
 
     /// Slave preferred Connection latency. It is measured in connection events skipped
     .con_latency = 0,
 
     /// Slave preferred Link supervision timeout measured in timer units (10 ms)
     /// use the macro MS_TO_TIMERUNITS to convert from milliseconds (ms) to timer units
-    .superv_to = MS_TO_TIMERUNITS(1000),
+    .superv_to = MS_TO_TIMERUNITS(4600),
 
     /// Privacy settings bit field (0b1 = enabled, 0b0 = disabled)
     ///  - [bit 0]: Privacy Support
@@ -208,18 +208,18 @@ static const struct gapm_configuration user_gapm_conf = {
 static const struct connection_param_configuration user_connection_param_conf = {
     /// Connection interval minimum measured in ble double slots (1.25ms)
     /// use the macro MS_TO_DOUBLESLOTS to convert from milliseconds (ms) to double slots
-    .intv_min = MS_TO_DOUBLESLOTS(10),
+    .intv_min = MS_TO_DOUBLESLOTS(880),
 
     /// Connection interval maximum measured in ble double slots (1.25ms)
     /// use the macro MS_TO_DOUBLESLOTS to convert from milliseconds (ms) to double slots
-    .intv_max = MS_TO_DOUBLESLOTS(20),
+    .intv_max = MS_TO_DOUBLESLOTS(900),
 
     /// Latency measured in connection events
     .latency = 0,
 
     /// Supervision timeout measured in timer units (10 ms)
     /// use the macro MS_TO_TIMERUNITS to convert from milliseconds (ms) to timer units
-    .time_out = MS_TO_TIMERUNITS(1250),
+    .time_out = MS_TO_TIMERUNITS(4600),
 
     /// Minimum Connection Event Duration measured in ble double slots (1.25ms)
     /// use the macro MS_TO_DOUBLESLOTS to convert from milliseconds (ms) to double slots

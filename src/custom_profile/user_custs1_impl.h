@@ -18,16 +18,7 @@
 #ifndef _USER_CUSTS1_IMPL_H_
 #define _USER_CUSTS1_IMPL_H_
 
-/**
- ****************************************************************************************
- * @addtogroup APP
- * @ingroup RICOW
- *
- * @brief
- *
- * @{
- ****************************************************************************************
- */
+#include <stdint.h>
 
 /*
  * DEFINES
@@ -39,6 +30,18 @@ enum
     CUSTS1_DATA_DISABLE = 0,
     CUSTS1_DATA_ENABLE,
 };
+
+/**
+ ****************************************************************************************
+ * @brief A data buffer for ecg and accel data.
+ ****************************************************************************************
+*/
+struct user_data_buffer {
+    const uint8_t SIZE;
+	  uint8_t data[20];
+    uint8_t pos;
+};
+
 
 /*
  * INCLUDE FILES
@@ -68,36 +71,7 @@ void user_custs1_ctrl_wr_ind_handler(ke_msg_id_t const msgid,
                                       struct custs1_val_write_ind const *param,
                                       ke_task_id_t const dest_id,
                                       ke_task_id_t const src_id);
-
-/**
- ****************************************************************************************
- * @brief ADXL X Value configuration indication handler.
- * @param[in] msgid   Id of the message received.
- * @param[in] param   Pointer to the parameters of the message.
- * @param[in] dest_id ID of the receiving task instance.
- * @param[in] src_id  ID of the sending task instance.
- * @return void
- ****************************************************************************************
-*/
-void user_custs1_adxl_val_cfg_ind_handler(ke_msg_id_t const msgid,
-                                            struct custs1_val_write_ind const *param,
-                                            ke_task_id_t const dest_id,
-                                            ke_task_id_t const src_id);
-
-/**
- ****************************************************************************************
- * @brief ADXL X Values notification confirmation handler.
- * @param[in] msgid   Id of the message received.
- * @param[in] param   Pointer to the parameters of the message.
- * @param[in] dest_id ID of the receiving task instance.
- * @param[in] src_id  ID of the sending task instance.
- * @return void
- ****************************************************************************************
-*/
-void user_custs1_adxl_val_ntf_cfm_handler(ke_msg_id_t const msgid,
-                                            struct custs1_val_write_ind const *param,
-                                            ke_task_id_t const dest_id,
-                                            ke_task_id_t const src_id);																				
+																		
 																						
 /**
  ****************************************************************************************
@@ -114,6 +88,15 @@ void app_adxl_val_timer_cb_handler(void);
  ****************************************************************************************
  */
 void app_ecg_val_timer_cb_handler(void);
+
+/**
+ ****************************************************************************************
+ * @brief Vol sampling timer callback handler.
+ * @return void
+ ****************************************************************************************
+ */
+void app_vol_val_timer_cb_handler(void);																						
+																																											
 
 /// @} APP
 

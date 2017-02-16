@@ -191,7 +191,6 @@ void user_app_adv_start(void)
     app_add_ad_struct(cmd, &mnf_data, sizeof(struct mnf_specific_data_ad_structure));
 	  arch_set_extended_sleep();
     app_easy_gap_undirected_advertise_start();
-
 }
 
 void user_app_connection(uint8_t connection_idx, struct gapc_connection_req_ind const *param)
@@ -227,7 +226,8 @@ void user_app_adv_undirect_complete(uint8_t status)
     // If advertising was canceled then update advertising data and start advertising again
     if (status == GAP_ERR_CANCELED)
     {
-	       arch_ble_ext_wakeup_on();
+			   user_app_adv_start();
+	   //    arch_ble_ext_wakeup_on();
     }
 }
 

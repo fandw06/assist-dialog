@@ -56,11 +56,11 @@
 #define APP_AD_MSD_COMPANY_ID_LEN   (2)
 #define APP_AD_MSD_DATA_LEN         (sizeof(uint16_t))
 
-//50ms, unit is 10ms
+//unit is 10ms
 //Sampling frequency of three sensors
-#define ECG_INTERVAL 20
-#define ACC_INTERVAL 20
-#define VOL_INTERVAL 20
+#define ECG_INTERVAL 1
+#define ACC_INTERVAL 1
+#define VOL_INTERVAL 1
 /*
  * TYPE DEFINITIONS
  ****************************************************************************************

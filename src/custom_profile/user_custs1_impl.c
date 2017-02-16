@@ -86,7 +86,7 @@ void user_custs1_ctrl_wr_ind_handler(ke_msg_id_t const msgid,
 void app_adxl_val_timer_cb_handler()
 {
 		// Current acceleration values.
-		uint8_t accel[] = {read_accel(ZDATA), read_accel(YDATA), read_accel(XDATA)};
+		uint8_t accel[] = {read_accel(XDATA), read_accel(YDATA), read_accel(ZDATA)};
 		accel_buff.data[accel_buff.pos++] = accel[0];
 		accel_buff.data[accel_buff.pos++] = accel[1];
 		accel_buff.data[accel_buff.pos++] = accel[2];
@@ -103,7 +103,7 @@ void app_adxl_val_timer_cb_handler()
 				req->conhdl = app_env->conhdl;
 				req->handle = CUST1_IDX_ADXL_VAL_VAL;
 				req->length = DEF_CUST1_ADXL_VAL_CHAR_LEN;
-				memcpy(req->value, &accel_buff, DEF_CUST1_ADXL_VAL_CHAR_LEN);
+				memcpy(req->value, &accel_buff.data, DEF_CUST1_ADXL_VAL_CHAR_LEN);
 				ke_msg_send(req);
 	  }
 		
@@ -139,7 +139,7 @@ void app_ecg_val_timer_cb_handler()
 				req->conhdl = app_env->conhdl;
 				req->handle = CUST1_IDX_ECG_VAL_VAL;
 				req->length = DEF_CUST1_ECG_VAL_CHAR_LEN;
-				memcpy(req->value, &ecg_buff, DEF_CUST1_ECG_VAL_CHAR_LEN);
+				memcpy(req->value, &ecg_buff.data, DEF_CUST1_ECG_VAL_CHAR_LEN);
 				ke_msg_send(req);
 	  }
 		
@@ -175,7 +175,7 @@ void app_vol_val_timer_cb_handler()
 				req->conhdl = app_env->conhdl;
 				req->handle = CUST1_IDX_VOL_VAL_VAL;
 				req->length = DEF_CUST1_VOL_VAL_CHAR_LEN;
-				memcpy(req->value, &vol_buff, DEF_CUST1_VOL_VAL_CHAR_LEN);
+				memcpy(req->value, &vol_buff.data, DEF_CUST1_VOL_VAL_CHAR_LEN);
 				ke_msg_send(req);
 	  }
 		

@@ -129,7 +129,7 @@ struct attm_desc_128 custs1_att_db[CUST1_IDX_NB] =
                                             sizeof(custs1_vol_val_char), sizeof(custs1_vol_val_char), (uint8_t*)&custs1_vol_val_char},
 
     // VOL Value Characteristic Value
-    [CUST1_IDX_VOL_VAL_VAL]           = {CUST1_ECG_VAL_UUID_128, ATT_UUID_128_LEN, PERM(RD, ENABLE) | PERM(NTF, ENABLE),
+    [CUST1_IDX_VOL_VAL_VAL]           = {CUST1_VOL_VAL_UUID_128, ATT_UUID_128_LEN, PERM(RD, ENABLE) | PERM(NTF, ENABLE),
                                             DEF_CUST1_VOL_VAL_CHAR_LEN, 0, NULL},
 
     // VOL Value Client Characteristic Configuration Descriptor

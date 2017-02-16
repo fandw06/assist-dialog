@@ -75,28 +75,15 @@ void user_custs1_ctrl_wr_ind_handler(ke_msg_id_t const msgid,
 																						
 /**
  ****************************************************************************************
- * @brief ADXL sampling timer callback handler.
+ * @brief Base sampling timer callback handler.
  * @return void
  ****************************************************************************************
  */
-void app_adxl_val_timer_cb_handler(void);
-																						
-/**
- ****************************************************************************************
- * @brief ECG sampling timer callback handler.
- * @return void
- ****************************************************************************************
- */
-void app_ecg_val_timer_cb_handler(void);
-
-/**
- ****************************************************************************************
- * @brief Vol sampling timer callback handler.
- * @return void
- ****************************************************************************************
- */
-void app_vol_val_timer_cb_handler(void);																						
-																																											
+void app_base_val_timer_cb_handler(void);																					
+															
+uint8_t* get_ecg(void);
+uint8_t* get_vol(void);
+uint8_t* get_accel(void);
 
 /// @} APP
 

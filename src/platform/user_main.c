@@ -284,7 +284,7 @@ void user_catch_rest_hndl(ke_msg_id_t const msgid,
 
             switch (msg_param->handle)
             {
-                case CUST1_IDX_ADXL_VAL_VAL:
+                case CUST1_IDX_SENSOR_VAL_VAL:
                     break;
                 default:
                     break;

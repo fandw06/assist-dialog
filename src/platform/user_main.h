@@ -58,9 +58,7 @@
 
 //unit is 10ms
 //Sampling frequency of three sensors
-#define ECG_INTERVAL 1
-#define ACC_INTERVAL 1
-#define VOL_INTERVAL 1
+#define BASE_INTERVAL 1
 /*
  * TYPE DEFINITIONS
  ****************************************************************************************

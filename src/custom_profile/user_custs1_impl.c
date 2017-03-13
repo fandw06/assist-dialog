@@ -41,14 +41,20 @@ struct user_data_buffer data_buff = {
 	  .pos = 0,
 };
 
-// The frequency ratio of ECG, vol, and accel.
+// The frequency ratio of accel, vol, and ecg.
 // Total bytes should be no more than 20B.
 // Eg, ratio = {2, 1, 6}, then total bytes in a packet is 2*3+1*2+6*2 = 20B
+/*
 const int ratio[3]    = {2, 1, 6}; 
 const int interval[3] = {3, 6, 1};
+*/
 
-uint8_t ecg_data[2];
-uint8_t vol_data[2];
+// acc:vol:ecg = 3:1:10, butes: 20B
+const int ratio[3]    = {3, 1, 10}; 
+const int interval[3] = {3, 10, 1};
+
+uint8_t ecg_data;
+uint8_t vol_data;
 uint8_t acc_data[3];
 
 ke_msg_id_t timer_base;
@@ -76,7 +82,7 @@ void user_custs1_ctrl_wr_ind_handler(ke_msg_id_t const msgid,
 			  running = 0;
 		}
 }
-
+/* this is for ratio 2-1-6, 2bytes.
 void app_base_val_timer_cb_handler()
 {
 		switch (data_buff.pos) {
@@ -147,28 +153,87 @@ void app_base_val_timer_cb_handler()
 						timer_base = app_easy_timer(BASE_INTERVAL, app_base_val_timer_cb_handler);
 		}
 }
+*/
 
-uint8_t* get_ecg()
+void app_base_val_timer_cb_handler()
+{
+		switch (data_buff.pos) {
+			  // ECG
+				case 0:
+				case 1:
+				case 6:
+				case 7:
+				case 12:
+				case 13:
+				{
+					  uint8_t val = get_ecg();
+						data_buff.data[data_buff.pos++] = val;
+						break;
+				}
+				// ECG, Acc
+				case 2:
+				case 8:
+				case 14:
+				{	
+					  uint8_t val = get_ecg();
+						data_buff.data[data_buff.pos++] = val;
+					 	uint8_t *val2 = get_accel();
+						data_buff.data[data_buff.pos++] = val2[0];
+				    data_buff.data[data_buff.pos++] = val2[1];
+				    data_buff.data[data_buff.pos++] = val2[2];
+						break;
+				}
+				// ECG, vol
+				case 18:
+				{
+					 	uint8_t val = get_ecg();
+						data_buff.data[data_buff.pos++] = val;
+					  val = get_vol();
+				    data_buff.data[data_buff.pos++] = val;
+					 	
+					
+					  data_buff.pos = 0;
+						struct custs1_val_ntf_req* req = KE_MSG_ALLOC_DYN(CUSTS1_VAL_NTF_REQ,
+																															TASK_CUSTS1,
+																															TASK_APP,
+																															custs1_val_ntf_req,
+																															DEF_CUST1_SENSOR_VAL_CHAR_LEN);
+						req->conhdl = app_env->conhdl;
+						req->handle = CUST1_IDX_SENSOR_VAL_VAL;
+						req->length = DEF_CUST1_SENSOR_VAL_CHAR_LEN;
+						memcpy(req->value, &data_buff.data, DEF_CUST1_SENSOR_VAL_CHAR_LEN);
+						ke_msg_send(req);
+						break;		
+				}
+				default:
+						break;
+		}
+
+		if (ke_state_get(TASK_APP) == APP_CONNECTED && running)
+		{
+				if (running)
+						timer_base = app_easy_timer(BASE_INTERVAL, app_base_val_timer_cb_handler);
+		}
+}
+
+uint8_t get_ecg()
 {
 		// Initialize adc, channel 02
 	  adc_init(GP_ADC_SE, 0, 0);
 	  adc_enable_channel(ADC_CHANNEL_P02);
 		int data = adc_get_sample();
 
-		ecg_data[0] = (data >> 8) & 0x03;
-		ecg_data[1] = data & 0xff;
+		ecg_data = (data >> 2);
 		return ecg_data;
 }
 
-uint8_t* get_vol()
+uint8_t get_vol()
 {
 		// Initialize adc, channel 01
 	  adc_init(GP_ADC_SE, 0, 0);
 	  adc_enable_channel(ADC_CHANNEL_P01);
 		int data = adc_get_sample();
-
-		vol_data[0] = (data >> 8) & 0x03;
-		vol_data[1] = data & 0xff;
+	  vol_data = (data >> 2);
 		return vol_data;
 }
 
@@ -178,4 +243,22 @@ uint8_t* get_accel()
 		acc_data[1] = read_accel(YDATA);
 		acc_data[2] = read_accel(ZDATA);
 		return acc_data;
+}
+
+/**
+ ****************************************************************************************
+ * @brief Turn the radio off according to the current sleep_mode and check if we can go
+ *        into deep sleep.
+ * @param[in] current_sleep_mode The current sleep mode proposed by the system so far
+ * @return sleep_mode_t return the allowable sleep mode
+ ****************************************************************************************
+ */
+static inline void ble_turn_radio_off(void)
+{
+    SetBits16(PMU_CTRL_REG, RADIO_SLEEP, 1); // turn off radio
+}
+
+static inline void ble_turn_radio_on(void)
+{
+    SetBits16(PMU_CTRL_REG, RADIO_SLEEP, 0); // turn off radio
 }

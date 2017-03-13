@@ -141,8 +141,8 @@ void user_app_init(void)
 	  adxl_init(ODR_25HZ);
 	
 		// enable near field mode.
-	//	rf_nfm_enable();
-	  rf_nfm_disable();
+		rf_nfm_enable();
+	//  rf_nfm_disable();
 }
 
 /**

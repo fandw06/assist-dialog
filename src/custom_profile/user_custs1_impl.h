@@ -51,7 +51,7 @@ struct user_data_buffer {
 #include "gapc_task.h"                 // gap functions and messages
 #include "gapm_task.h"                 // gap functions and messages
 #include "custs1_task.h"
-
+#include "datasheet.h"
 /*
  * FUNCTION DECLARATIONS
  ****************************************************************************************
@@ -81,10 +81,11 @@ void user_custs1_ctrl_wr_ind_handler(ke_msg_id_t const msgid,
  */
 void app_base_val_timer_cb_handler(void);																					
 															
-uint8_t* get_ecg(void);
-uint8_t* get_vol(void);
+uint8_t get_ecg(void);
+uint8_t get_vol(void);
 uint8_t* get_accel(void);
-
+static inline void ble_turn_radio_off(void);
+static inline void ble_turn_radio_on(void);
 /// @} APP
 
 #endif // _USER_CUSTS1_IMPL_H_

@@ -218,9 +218,9 @@ void app_base_val_timer_cb_handler()
 
 uint8_t get_ecg()
 {
-		// Initialize adc, channel 02
+		// Initialize adc, channel 00
 	  adc_init(GP_ADC_SE, 0, 0);
-	  adc_enable_channel(ADC_CHANNEL_P02);
+	  adc_enable_channel(ADC_CHANNEL_P00);
 		int data = adc_get_sample();
 
 		ecg_data = (data >> 2);

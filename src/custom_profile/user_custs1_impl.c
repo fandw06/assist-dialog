@@ -230,7 +230,7 @@ uint8_t get_ecg()
 uint8_t get_vol()
 {
 		// Initialize adc, channel 01
-	  adc_init(GP_ADC_SE, 0, 0);
+	  adc_init(GP_ADC_SE, 0, GP_ADC_ATTN3X);
 	  adc_enable_channel(ADC_CHANNEL_P01);
 		int data = adc_get_sample();
 	  vol_data = (data >> 2);

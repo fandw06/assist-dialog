@@ -59,7 +59,12 @@ uint8_t acc_data[3];
 
 ke_msg_id_t timer_base;
 bool running;
-uint32_t interval = BASE_INTERVAL;
+uint32_t timer_interval = BASE_INTERVAL;
+
+uint8_t latest_vol = 0xff;
+const uint8_t GREEN = 0xa0;
+const uint8_t YELLOW = 0x50;
+
 /*
  * FUNCTION DEFINITIONS
  ****************************************************************************************
@@ -190,6 +195,8 @@ void app_base_val_timer_cb_handler()
 					 	uint8_t val = get_ecg();
 						data_buff.data[data_buff.pos++] = val;
 					  val = get_vol();
+						// Update the latest voltage
+					  latest_vol = val;
 				    data_buff.data[data_buff.pos++] = val;
 					 	
 					
@@ -214,7 +221,7 @@ void app_base_val_timer_cb_handler()
 		{
 				if (running) {
 						updatePara();
-						timer_base = app_easy_timer(interval, app_base_val_timer_cb_handler);
+						timer_base = app_easy_timer(timer_interval, app_base_val_timer_cb_handler);
 				}
 		}
 }
@@ -268,4 +275,13 @@ static inline void ble_turn_radio_on(void)
 
 void updatePara() {
 
+		if (latest_vol > GREEN) {
+				timer_interval = BASE_INTERVAL;
+		}
+		else if (latest_vol > YELLOW) {
+				timer_interval = BASE_INTERVAL*5;
+		}
+		else {
+				timer_interval = BASE_INTERVAL*20;
+		}
 }

@@ -86,6 +86,7 @@ uint8_t get_vol(void);
 uint8_t* get_accel(void);
 static inline void ble_turn_radio_off(void);
 static inline void ble_turn_radio_on(void);
+void updatePara();
 /// @} APP
 
 #endif // _USER_CUSTS1_IMPL_H_

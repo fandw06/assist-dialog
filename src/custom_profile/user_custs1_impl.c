@@ -59,6 +59,7 @@ uint8_t acc_data[3];
 
 ke_msg_id_t timer_base;
 bool running;
+uint32_t interval = BASE_INTERVAL;
 /*
  * FUNCTION DEFINITIONS
  ****************************************************************************************
@@ -211,8 +212,10 @@ void app_base_val_timer_cb_handler()
 
 		if (ke_state_get(TASK_APP) == APP_CONNECTED && running)
 		{
-				if (running)
-						timer_base = app_easy_timer(BASE_INTERVAL, app_base_val_timer_cb_handler);
+				if (running) {
+						updatePara();
+						timer_base = app_easy_timer(interval, app_base_val_timer_cb_handler);
+				}
 		}
 }
 
@@ -261,4 +264,8 @@ static inline void ble_turn_radio_off(void)
 static inline void ble_turn_radio_on(void)
 {
     SetBits16(PMU_CTRL_REG, RADIO_SLEEP, 0); // turn off radio
+}
+
+void updatePara() {
+
 }

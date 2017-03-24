@@ -141,8 +141,8 @@ void user_app_init(void)
 	  adxl_init(ODR_25HZ);
 	
 		// enable near field mode.
-	//	rf_nfm_enable();
-	  rf_nfm_disable();
+		rf_nfm_enable();
+	//  rf_nfm_disable();
 }
 
 /**
@@ -284,7 +284,7 @@ void user_catch_rest_hndl(ke_msg_id_t const msgid,
 
             switch (msg_param->handle)
             {
-                case CUST1_IDX_ADXL_VAL_VAL:
+                case CUST1_IDX_SENSOR_VAL_VAL:
                     break;
                 default:
                     break;

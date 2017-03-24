@@ -32,10 +32,9 @@
  * VARIABLES
  ****************************************************************************************
  */
- const static int conn_min = 88;
- const static int conn_max = 98;
- const static int conn_timeout = 8000;
- 
+ const static int conn_min = 160;
+ const static int conn_max = 200;
+ const static int conn_timeout = 8100;
 
 /******************************************
  * Default sleep mode. Possible values are:

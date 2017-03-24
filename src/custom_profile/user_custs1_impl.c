@@ -59,7 +59,8 @@ uint8_t acc_data[3];
 
 ke_msg_id_t timer_base;
 bool running;
-uint32_t interval = BASE_INTERVAL;
+uint32_t timer_interval = BASE_INTERVAL;
+uint32_t dummy_counter = 1;
 /*
  * FUNCTION DEFINITIONS
  ****************************************************************************************
@@ -214,7 +215,7 @@ void app_base_val_timer_cb_handler()
 		{
 				if (running) {
 						updatePara();
-						timer_base = app_easy_timer(interval, app_base_val_timer_cb_handler);
+						timer_base = app_easy_timer(timer_interval, app_base_val_timer_cb_handler);
 				}
 		}
 }
@@ -267,5 +268,15 @@ static inline void ble_turn_radio_on(void)
 }
 
 void updatePara() {
-
+		dummy_counter++;
+		if (dummy_counter == 1000) {
+				timer_interval = timer_interval*5;
+		}
+		else if (dummy_counter == 1100) {
+				timer_interval = timer_interval*5;
+		}
+		else if (dummy_counter == 1140) {
+				timer_interval = timer_interval/25;
+			  dummy_counter = 0;
+		}
 }

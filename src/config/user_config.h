@@ -32,8 +32,8 @@
  * VARIABLES
  ****************************************************************************************
  */
- const static int conn_min = 160;
- const static int conn_max = 200;
+ const static int conn_min = 16;
+ const static int conn_max = 20;
  const static int conn_timeout = 8100;
 
 /******************************************

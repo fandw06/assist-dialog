@@ -58,7 +58,7 @@
 
 //unit is 10ms
 //Sampling frequency of three sensors
-#define BASE_INTERVAL 1
+#define BASE_INTERVAL 4
 /*
  * TYPE DEFINITIONS
  ****************************************************************************************

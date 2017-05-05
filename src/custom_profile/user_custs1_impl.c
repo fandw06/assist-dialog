@@ -239,9 +239,9 @@ uint8_t get_ecg()
 
 uint8_t get_vol()
 {
-		// Initialize adc, channel 01
+		// Initialize adc, channel 02
 	  adc_init(GP_ADC_SE, 0, GP_ADC_ATTN3X);
-	  adc_enable_channel(ADC_CHANNEL_P01);
+	  adc_enable_channel(ADC_CHANNEL_P02);
 		int data = adc_get_sample();
 	  vol_data = (data >> 2);
 		return vol_data;
@@ -274,7 +274,7 @@ static inline void ble_turn_radio_on(void)
 }
 
 void updatePara() {
-
+/*
 		if (latest_vol > GREEN) {
 				timer_interval = BASE_INTERVAL;
 		}
@@ -284,4 +284,5 @@ void updatePara() {
 		else {
 				timer_interval = BASE_INTERVAL*20;
 		}
+	*/
 }
